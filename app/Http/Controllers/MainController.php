@@ -25,6 +25,7 @@ class MainController extends Controller
 
     public function store(Request $request)
     {
+
         $datetime = $request->date.' '.$request->time;
         $timeline = new TimelineItem();
         $timeline->title = $request->title;
@@ -32,11 +33,13 @@ class MainController extends Controller
         $timeline->time = $request->time;
         $timeline->date_time = $datetime;
         $timeline->comment = $request->comment;
+        $timeline->timeline_id = $request->timeline;
+        $timeline->label_id = $request->label ?? 0;
         if ($request->file){
             $timeline->attachment = $this->uploadSingleFile($request->file,'attachment','at');
         }
         if ($timeline->save()){
-            toast('Timeline add successfully','success');
+            toast('Timeline item add successfully','success');
         }else{
             toast('Something wrong','error');
         }
@@ -55,11 +58,11 @@ class MainController extends Controller
     {
         $exist = TimelineItem::where('id',$id)->first();
         if (empty($exist)){
-            toast('Timeline not found','error');
+            toast('Timeline item not found','error');
             return redirect()->back();
         }
         $exist->delete();
-        toast('Timeline delete successful','success');
+        toast('Timeline item delete successful','success');
         return redirect()->back();
     }
 
@@ -67,7 +70,7 @@ class MainController extends Controller
     {
         $exist = TimelineItem::where('id',$id)->first();
         if (empty($exist)){
-            toast('Timeline not found','error');
+            toast('Timeline item not found','error');
             return redirect()->back();
         }
         $exist->attachment = '';
@@ -77,7 +80,7 @@ class MainController extends Controller
     }
     public function editData(Request $request)
     {
-        $exist = Timeline::where('id',$request->id)->first();
+        $exist = TimelineItem::where('id',$request->id)->first();
         if (empty($exist)){
             return response()->json([
                 'status'=>false,
@@ -90,14 +93,28 @@ class MainController extends Controller
                 <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
                         data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="'.route('update-data').'" method="POST" enctype="multipart/form-data" id="add-form">
+            <form action="'.route('update-data').'" method="POST" enctype="multipart/form-data" id="edit-form-app">
                 <input type="hidden" name="_token" value="'.csrf_token().'">
                 <input type="hidden" name="id" value="'.$exist->id.'">
                 <div class="modal-body p-0">
                     <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
-                        <h4 class="mb-1" id="modalExampleDemoLabel">Edit timeline </h4>
+                        <h4 class="mb-1" id="modalExampleDemoLabel">Edit timeline item </h4>
                     </div>
                     <div class="p-4 pb-0">
+                        <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <label class="col-form-label" for="recipient-name">Select Timeline:</label>
+                                    <select name="timeline" class="form-select" required>
+                                        '.getTimelineDropdown($exist->timeline_id).'
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label class="col-form-label" for="recipient-name">Select Label:</label>
+                                    <select name="label" class="form-select">
+                                        '.getLabelDropdown($exist->label_id).'
+                                    </select>
+                                </div>
+                        </div>
                         <div class="mb-3">
                             <label class="col-form-label" for="recipient-name">Title:</label>
                             <input class="form-control" name="title"  type="text" value="'.$exist->title.'" required/>
@@ -135,7 +152,7 @@ class MainController extends Controller
     {
         $timeline = TimelineItem::where('id',$request->id)->first();
         if (empty($timeline)){
-            toast('Timeline not found','error');
+            toast('Timeline item not found','error');
             return redirect()->back();
         }
         $datetime = $request->date.' '.$request->time;
@@ -144,11 +161,13 @@ class MainController extends Controller
         $timeline->time = $request->time;
         $timeline->date_time = $datetime;
         $timeline->comment = $request->comment;
+        $timeline->timeline_id = $request->timeline;
+        $timeline->label_id = $request->label ?? 0;
         if ($request->file){
             $timeline->attachment = $this->uploadSingleFile($request->file,'attachment','at');
         }
         if ($timeline->save()){
-            toast('Timeline update successfully','success');
+            toast('Timeline item update successfully','success');
         }else{
             toast('Something wrong','error');
         }

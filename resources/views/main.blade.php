@@ -28,7 +28,24 @@
             margin-top: 5px;
             font-family: 'Circular Std';
         }
-
+        label.error {
+            min-height: 28px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: 5px 10px;
+            width: 100%;
+            color: #f44336;
+            background: rgba(244, 67, 54, 0.1);
+            font-size: 12px;
+            line-height: 14px;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-family: 'Circular Std';
+        }
         .timeline-item-card {
             position: relative;
         }
@@ -180,7 +197,6 @@
                                 class="fas fa-plus fa-fw"></i>Add New</a>
                     </div>
                 </div>
-
                 <div class="card-body">
                     <nav>
                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -381,9 +397,23 @@
                     @csrf
                     <div class="modal-body p-0">
                         <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
-                            <h4 class="mb-1" id="modalExampleDemoLabel">Add a new timeline </h4>
+                            <h4 class="mb-1" id="modalExampleDemoLabel">Add a new timeline item</h4>
                         </div>
                         <div class="p-4 pb-0">
+                            <div class="row mb-3">
+                                <div class="col-lg-6">
+                                    <label class="col-form-label" for="recipient-name">Select Timeline:</label>
+                                    <select name="timeline" class="form-select" required>
+                                        {!! getTimelineDropdown() !!}
+                                    </select>
+                                </div>
+                                <div class="col-lg-6">
+                                    <label class="col-form-label" for="recipient-name">Select Label:</label>
+                                    <select name="label" class="form-select">
+                                        {!! getLabelDropdown() !!}
+                                    </select>
+                                </div>
+                            </div>
                             <div class="mb-3">
                                 <label class="col-form-label" for="recipient-name">Title:</label>
                                 <input class="form-control" name="title" type="text" required/>
@@ -478,19 +508,7 @@
                     }
                 }
             });
-            $('#edit-modal').validate({
-                errorElement: 'span',
-                errorClass: 'error-message',
-                rules: {
-                    title: 'required',
-                    date: 'required',
-                    time: 'required',
-                    file: {
-                        required: false,
-                        accept: "image/*,application/pdf,application/msword"
-                    }
-                }
-            });
+
             $(document).on('click', '.delete', function (e) {
                 e.preventDefault();
                 var link = $(this).attr('href');
@@ -572,7 +590,8 @@
                     success: function (response) {
                         if (response.status) {
                             $('#edit-modal .modal-content').html(response.data);
-                            $('#edit-modal').modal('show')
+                            $('#edit-modal').modal('show');
+                            appendForm();
                         } else {
                             Swal.fire({
                                 icon: "error",
@@ -583,6 +602,24 @@
                     }
                 })
             })
+
+            function appendForm() {
+                console.log('as')
+                //$("#edit-form-app").validate().resetForm();
+                $('#edit-form-app').validate({
+                    errorElement: 'span',
+                    errorClass: 'error-message',
+                    rules: {
+                        title: 'required',
+                        date: 'required',
+                        time: 'required',
+                        file: {
+                            required: false,
+                            accept: "image/*,application/pdf,application/msword"
+                        }
+                    }
+                });
+            }
             $(document).on('click', '.edit-timeline', function (e) {
                 e.preventDefault();
                 var id = $(this).data('id');
