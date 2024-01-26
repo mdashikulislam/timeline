@@ -10,7 +10,7 @@ class MainController extends Controller
 {
     public function index()
     {
-        $timeline = TimelineItem::orderByDesc('date_time')->get();
+        $timeline = Timeline::orderBy('created_at','ASC')->get();
         return view('main')
             ->with([
                 'timelines'=>$timeline

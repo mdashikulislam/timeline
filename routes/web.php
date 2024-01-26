@@ -19,3 +19,8 @@ Route::get('delete-timeline/{id}',[\App\Http\Controllers\MainController::class,'
 Route::post('edit-data',[\App\Http\Controllers\MainController::class,'editData'])->name('edit-data');
 Route::post('update-data',[\App\Http\Controllers\MainController::class,'update'])->name('update-data');
 Route::get('delete-attachment/{id}',[\App\Http\Controllers\MainController::class,'deleteAttachment'])->name('delete-attachment-data');
+Route::prefix('timeline')->controller(\App\Http\Controllers\TimelineController::class)->group(function (){
+    Route::post('store','store')->name('timeline.store');
+    Route::post('update','update')->name('timeline.update');
+    Route::get('delete/{id}','delete')->name('timeline.delete');
+});

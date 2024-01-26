@@ -45,18 +45,21 @@
             visibility: visible;
         }
 
-        .timeline-vertical .timeline-item:not(:last-child)::before{
-            border-left: 2px solid #cc00cc!important;
+        .timeline-vertical .timeline-item:not(:last-child)::before {
+            border-left: 2px solid #cc00cc !important;
         }
-        .timeline-vertical .timeline-icon{
-            border: 2px solid #cc00cc!important;
+
+        .timeline-vertical .timeline-icon {
+            border: 2px solid #cc00cc !important;
         }
-        h5{
-            font-size: 1.5rem!important;
+
+        h5 {
+            font-size: 1.5rem !important;
         }
-        @media (min-width: 992px){
-            .timeline-vertical .timeline-item-content::before{
-                 background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%)
+
+        @media (min-width: 992px) {
+            .timeline-vertical .timeline-item-content::before {
+                background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%)
             }
 
         }
@@ -64,6 +67,143 @@
 </head>
 <body>
 <div class="container mt-5">
+    <div class="row mb-5">
+        <div class="col-lg-6 col-12">
+            <div class="card h-lg-100 overflow-hidden">
+                <div class="card-header bg-body-tertiary">
+                    <div class="d-flex justify-content-between align-items-center ">
+                        <h5 class="mb-0 d-inline">Timeline</h5>
+                        <a data-bs-toggle="modal" data-bs-target="#add-timeline-modal" href="#"
+                           class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw"></i>Add New</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive scrollbar">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Created</th>
+                                <th class="text-end" scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse($timelines as $timeline)
+                                <tr>
+                                    <td>{{$timeline->name}}</td>
+                                    <td>{{$timeline->created_at->format('Y-m-d H:i:s')}}</td>
+                                    <td class="text-end">
+                                        <div>
+                                            <a data-title="{{$timeline->name}}" data-id="{{$timeline->id}}" class="btn btn-link edit-timeline p-0" type="button" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="Edit"><span
+                                                    class="text-500 fas fa-edit"></span></a>
+                                            <a href="{{route('timeline.delete',['id'=>$timeline->id])}}" class="btn btn-link p-0 ms-2 delete-timeline" type="button" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="Delete"><span
+                                                    class="text-500 fas fa-trash-alt"></span></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-12">
+            <div class="card h-lg-100 overflow-hidden">
+                <div class="card-header bg-body-tertiary">
+                    <h5 class="mb-0 d-inline">Label</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive scrollbar">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th class="text-end" scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Ricky Antony</td>
+                                <td>ricky@example.com</td>
+                                <td class="text-end">
+                                    <div>
+                                        <button class="btn btn-link p-0" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Edit"><span
+                                                class="text-500 fas fa-edit"></span></button>
+                                        <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Delete"><span
+                                                class="text-500 fas fa-trash-alt"></span></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Emma Watson</td>
+                                <td>emma@example.com</td>
+                                <td class="text-end">
+                                    <div>
+                                        <button class="btn btn-link p-0" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Edit"><span
+                                                class="text-500 fas fa-edit"></span></button>
+                                        <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Delete"><span
+                                                class="text-500 fas fa-trash-alt"></span></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Rowen Atkinson</td>
+                                <td>rown@example.com</td>
+                                <td class="text-end">
+                                    <div>
+                                        <button class="btn btn-link p-0" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Edit"><span
+                                                class="text-500 fas fa-edit"></span></button>
+                                        <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Delete"><span
+                                                class="text-500 fas fa-trash-alt"></span></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Antony Hopkins</td>
+                                <td>antony@example.com</td>
+                                <td class="text-end">
+                                    <div>
+                                        <button class="btn btn-link p-0" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Edit"><span
+                                                class="text-500 fas fa-edit"></span></button>
+                                        <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Delete"><span
+                                                class="text-500 fas fa-trash-alt"></span></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Jennifer Schramm</td>
+                                <td>jennifer@example.com</td>
+                                <td class="text-end">
+                                    <div>
+                                        <button class="btn btn-link p-0" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Edit"><span
+                                                class="text-500 fas fa-edit"></span></button>
+                                        <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Delete"><span
+                                                class="text-500 fas fa-trash-alt"></span></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card mb-3">
@@ -74,7 +214,6 @@
                                 class="fas fa-plus fa-fw"></i>Add New</a>
                     </div>
                 </div>
-
                 <div class="card-body px-sm-4 px-md-8 px-lg-6 px-xxl-8">
                     <div class="timeline-vertical">
                         @forelse($timelines as $key => $timeline)
@@ -85,7 +224,8 @@
                                 }
                             @endphp
                             <div class="timeline-item timeline-item-{{$dir}}">
-                                <div class="timeline-icon icon-item icon-item-lg text-primary border-300"><span style="color:#800080"
+                                <div class="timeline-icon icon-item icon-item-lg text-primary border-300"><span
+                                        style="color:#800080"
                                         class="fs-8 fas fa-minus"></span></div>
                                 <div class="row">
                                     <div class="col-lg-6 timeline-item-time">
@@ -94,14 +234,15 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <div class="timeline-item-content" >
-                                            <div class="timeline-item-card" style="background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);color:#fff">
+                                        <div class="timeline-item-content">
+                                            <div class="timeline-item-card"
+                                                 style="background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);color:#fff">
                                                 <h5 class="mb-2" style="color:#fff">{{$timeline->title}}</h5>
                                                 @if($timeline->comment)
-                                                <div>
-                                                    <p class="mb-0"><strong>Comment:</strong></p>
-                                                    <p>{{$timeline->comment}}</p>
-                                                </div>
+                                                    <div>
+                                                        <p class="mb-0"><strong>Comment:</strong></p>
+                                                        <p>{{$timeline->comment}}</p>
+                                                    </div>
                                                 @endif
                                                 @if($timeline->attachment)
                                                     <p class="m-0"><strong>Attachment</strong></p>
@@ -147,6 +288,47 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="edit-timeline-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+            <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{route('timeline.update')}}" method="POST" id="edit-timeline-body">
+
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add-timeline-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+            <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{route('timeline.store')}}" method="POST" >
+                @csrf
+                <div class="modal-body p-0">
+                    <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
+                        <h4 class="mb-1" id="modalExampleDemoLabel">Add a new timeline </h4>
+                    </div>
+                    <div class="p-4 pb-0">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="recipient-name">Timeline Name:</label>
+                            <input class="form-control" name="title" type="text" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -306,6 +488,23 @@
                 }
             });
         })
+        $(document).on('click', '.delete-timeline', function (e) {
+            e.preventDefault();
+            var link = $(this).attr('href');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = link;
+                }
+            });
+        })
         $(document).on('click', '.edit', function (e) {
             e.preventDefault();
             var id = $(this).data('id');
@@ -330,6 +529,30 @@
                 }
             })
         })
+        $(document).on('click','.edit-timeline',function (e){
+            e.preventDefault();
+            var id = $(this).data('id');
+            var title = $(this).data('title');
+            var token = '{{csrf_token()}}';
+            $('#edit-timeline-body').html(`<div class="modal-body p-0">
+                    <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
+                        <h4 class="mb-1" id="modalExampleDemoLabel">Edit timeline </h4>
+                    </div>
+                    <div class="p-4 pb-0">
+                        <input type="hidden" name="id" value="${id}">
+                        <input type="hidden" name="_token" value="${token}">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="recipient-name">Timeline Name:</label>
+                            <input class="form-control" name="title" value="${title}" type="text" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="submit">Updaate</button>
+                </div>`);
+            $('#edit-timeline-modal').modal('show');
+        });
     });
 </script>
 </body>
