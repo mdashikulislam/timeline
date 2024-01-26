@@ -114,7 +114,11 @@
         <div class="col-lg-6 col-12">
             <div class="card h-lg-100 overflow-hidden">
                 <div class="card-header bg-body-tertiary">
-                    <h5 class="mb-0 d-inline">Label</h5>
+                    <div class="d-flex justify-content-between align-items-center ">
+                        <h5 class="mb-0 d-inline">Label</h5>
+                        <a data-bs-toggle="modal" data-bs-target="#add-label-modal" href="#"
+                           class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw"></i>Add New</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive scrollbar">
@@ -122,81 +126,34 @@
                             <thead>
                             <tr>
                                 <th scope="col">Name</th>
-                                <th scope="col">Email</th>
+                                <th scope="col">Color</th>
+                                <th scope="col">Created</th>
                                 <th class="text-end" scope="col">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Ricky Antony</td>
-                                <td>ricky@example.com</td>
-                                <td class="text-end">
-                                    <div>
-                                        <button class="btn btn-link p-0" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Edit"><span
-                                                class="text-500 fas fa-edit"></span></button>
-                                        <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Delete"><span
-                                                class="text-500 fas fa-trash-alt"></span></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Emma Watson</td>
-                                <td>emma@example.com</td>
-                                <td class="text-end">
-                                    <div>
-                                        <button class="btn btn-link p-0" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Edit"><span
-                                                class="text-500 fas fa-edit"></span></button>
-                                        <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Delete"><span
-                                                class="text-500 fas fa-trash-alt"></span></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Rowen Atkinson</td>
-                                <td>rown@example.com</td>
-                                <td class="text-end">
-                                    <div>
-                                        <button class="btn btn-link p-0" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Edit"><span
-                                                class="text-500 fas fa-edit"></span></button>
-                                        <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Delete"><span
-                                                class="text-500 fas fa-trash-alt"></span></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Antony Hopkins</td>
-                                <td>antony@example.com</td>
-                                <td class="text-end">
-                                    <div>
-                                        <button class="btn btn-link p-0" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Edit"><span
-                                                class="text-500 fas fa-edit"></span></button>
-                                        <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Delete"><span
-                                                class="text-500 fas fa-trash-alt"></span></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Jennifer Schramm</td>
-                                <td>jennifer@example.com</td>
-                                <td class="text-end">
-                                    <div>
-                                        <button class="btn btn-link p-0" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Edit"><span
-                                                class="text-500 fas fa-edit"></span></button>
-                                        <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Delete"><span
-                                                class="text-500 fas fa-trash-alt"></span></button>
-                                    </div>
-                                </td>
-                            </tr>
+                            @forelse($labels as $label)
+                                <tr>
+                                    <td>{{$label->name}}</td>
+                                    <td>
+                                        <div class="progress">
+                                            <div  class="progress-bar" style="width: 100%;background: {{$label->color}}"></div>
+                                        </div>
+                                    </td>
+                                    <td>{{$label->created_at->format('Y-m-d H:i:s')}}</td>
+                                    <td class="text-end">
+                                        <div>
+                                            <a data-id="{{$label->id}}" data-name="{{$label->name}}" data-color="{{$label->color}}" class="btn btn-link p-0 edit-label" type="button" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="Edit"><span
+                                                    class="text-500 fas fa-edit"></span></a>
+                                            <a href="{{route('label.delete',['id'=>$label->id])}}" class="btn btn-link delete-label p-0 ms-2" type="button" data-bs-toggle="tooltip"
+                                                    data-bs-placement="top" title="Delete"><span
+                                                    class="text-500 fas fa-trash-alt"></span></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                            @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -304,6 +261,19 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="edit-label-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+            <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{route('label.update')}}" method="POST" id="edit-label-body">
+
+            </form>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="add-timeline-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog " role="document" style="max-width: 500px">
         <div class="modal-content position-relative">
@@ -321,6 +291,38 @@
                         <div class="mb-3">
                             <label class="col-form-label" for="recipient-name">Timeline Name:</label>
                             <input class="form-control" name="title" type="text" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="add-label-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+            <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{route('label.store')}}" method="POST" >
+                @csrf
+                <div class="modal-body p-0">
+                    <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
+                        <h4 class="mb-1" id="modalExampleDemoLabel">Add a new label </h4>
+                    </div>
+                    <div class="p-4 pb-0">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="recipient-name">Label Name:</label>
+                            <input class="form-control" name="name" type="text" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="col-form-label" for="recipient-name">label Color:</label>
+                            <input class="form-control" name="color" type="color" required/>
                         </div>
                     </div>
                 </div>
@@ -386,7 +388,6 @@
         </div>
     </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -488,6 +489,23 @@
                 }
             });
         })
+        $(document).on('click', '.delete-label', function (e) {
+            e.preventDefault();
+            var link = $(this).attr('href');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = link;
+                }
+            });
+        })
         $(document).on('click', '.delete-timeline', function (e) {
             e.preventDefault();
             var link = $(this).attr('href');
@@ -552,6 +570,36 @@
                     <button class="btn btn-primary" type="submit">Updaate</button>
                 </div>`);
             $('#edit-timeline-modal').modal('show');
+        });
+        $(document).on('click','.edit-label',function (e){
+            e.preventDefault();
+            var id = $(this).data('id');
+            var title = $(this).data('name');
+            var color = $(this).data('color');
+            console.log(color)
+            var token = '{{csrf_token()}}';
+            $('#edit-label-body').html(`<div class="modal-body p-0">
+                    <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
+                        <h4 class="mb-1" id="modalExampleDemoLabel">Edit label </h4>
+                    </div>
+                    <div class="p-4 pb-0">
+                        <input type="hidden" name="id" value="${id}">
+                        <input type="hidden" name="_token" value="${token}">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="recipient-name">Label Name:</label>
+                            <input class="form-control" name="title" value="${title}" type="text" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="col-form-label" for="recipient-name">Label Color:</label>
+                            <input class="form-control" name="color" value="${color}" type="color" required/>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="submit">Updaate</button>
+                </div>`);
+            $('#edit-label-modal').modal('show');
         });
     });
 </script>

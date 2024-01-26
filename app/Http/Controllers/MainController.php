@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Label;
 use App\Models\Timeline;
 use App\Models\TimelineItem;
 use Illuminate\Http\Request;
@@ -11,9 +12,11 @@ class MainController extends Controller
     public function index()
     {
         $timeline = Timeline::orderBy('created_at','ASC')->get();
+        $labels = Label::all();
         return view('main')
             ->with([
-                'timelines'=>$timeline
+                'timelines'=>$timeline,
+                'labels'=>$labels
             ]);
     }
 

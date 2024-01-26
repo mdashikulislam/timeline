@@ -24,3 +24,9 @@ Route::prefix('timeline')->controller(\App\Http\Controllers\TimelineController::
     Route::post('update','update')->name('timeline.update');
     Route::get('delete/{id}','delete')->name('timeline.delete');
 });
+Route::prefix('label')->controller(\App\Http\Controllers\LabelController::class)->group(function (){
+    Route::post('store','store')->name('label.store');
+    Route::post('update','update')->name('label.update');
+    Route::get('delete/{id}','delete')->name('label.delete');
+});
+
