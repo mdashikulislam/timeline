@@ -58,7 +58,7 @@
             .timeline-vertical .timeline-item-content::before{
                  background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%)
             }
-           
+
         }
     </style>
 </head>
@@ -148,4 +148,190 @@
                 </div>
             </div>
         </div>
-    </div
+    </div>
+</div>
+<div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+            <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                        data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{route('store')}}" method="POST" enctype="multipart/form-data" id="add-form">
+                @csrf
+                <div class="modal-body p-0">
+                    <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
+                        <h4 class="mb-1" id="modalExampleDemoLabel">Add a new timeline </h4>
+                    </div>
+                    <div class="p-4 pb-0">
+                        <div class="mb-3">
+                            <label class="col-form-label" for="recipient-name">Title:</label>
+                            <input class="form-control" name="title" type="text" required/>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-lg-6">
+                                <label class="col-form-label" for="recipient-name">Date:</label>
+                                <input class="form-control" name="date" type="date" required/>
+                            </div>
+                            <div class="mb-3 col-lg-6">
+                                <label class="col-form-label" for="recipient-name">Time:</label>
+                                <input class="form-control" name="time" type="time" required/>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="col-form-label" for="recipient-name">Attachment:</label>
+                            <input class="form-control" name="file" id="file1" type="file"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="col-form-label" for="recipient-name">Comment:</label>
+                            <textarea name="comment" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document" style="max-width: 500px">
+        <div class="modal-content position-relative">
+
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $.validator.addMethod("accept", function (value, element, param) {
+
+        // Split mime on commas in case we have multiple types we can accept
+        var typeParam = typeof param === "string" ? param.replace(/\s/g, "") : "image/*",
+            optionalValue = this.optional(element),
+            i, file, regex;
+        if (optionalValue) {
+            return optionalValue;
+        }
+        if ($(element).attr("type") === "file") {
+            typeParam = typeParam
+                .replace(/[\-\[\]\/\{\}\(\)\+\?\.\\\^\$\|]/g, "\\$&")
+                .replace(/,/g, "|")
+                .replace(/\/\*/g, "/.*");
+
+            // Check if the element has a FileList before checking each file
+            if (element.files && element.files.length) {
+                regex = new RegExp(".?(" + typeParam + ")$", "i");
+                for (i = 0; i < element.files.length; i++) {
+                    file = element.files[i];
+
+                    // Grab the mimetype from the loaded file, verify it matches
+                    if (!file.type.match(regex)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }, $.validator.format("Please enter a value with a valid mimetype."));
+</script>
+<script>
+    $(document).ready(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+        $('#add-form').validate({
+            errorElement: 'span',
+            errorClass: 'error-message',
+            rules: {
+                title: 'required',
+                date: 'required',
+                time: 'required',
+                file: {
+                    required: false,
+                    accept: "image/*,application/pdf,application/msword"
+                }
+            }
+        });
+        $('#edit-modal').validate({
+            errorElement: 'span',
+            errorClass: 'error-message',
+            rules: {
+                title: 'required',
+                date: 'required',
+                time: 'required',
+                file: {
+                    required: false,
+                    accept: "image/*,application/pdf,application/msword"
+                }
+            }
+        });
+        $(document).on('click', '.delete', function (e) {
+            e.preventDefault();
+            var link = $(this).attr('href');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = link;
+                }
+            });
+        })
+        $(document).on('click', '.delete-attachment', function (e) {
+            e.preventDefault();
+            var link = $(this).attr('href');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = link;
+                }
+            });
+        })
+        $(document).on('click', '.edit', function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            $.ajax({
+                url: '{{route('edit-data')}}',
+                method: 'POST',
+                data: {
+                    '_token': '{{csrf_token()}}',
+                    'id': id,
+                },
+                success: function (response) {
+                    if (response.status) {
+                        $('#edit-modal .modal-content').html(response.data);
+                        $('#edit-modal').modal('show')
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Something went wrong!",
+                        });
+                    }
+                }
+            })
+        })
+    });
+</script>
+</body>
+</html>
+@include('sweetalert::alert')
