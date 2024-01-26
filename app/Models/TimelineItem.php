@@ -10,4 +10,9 @@ class TimelineItem extends Model
 {
     use SoftDeletes;
     protected $table = 'timeline_items';
+
+    public function labels()
+    {
+        return $this->hasOne(Label::class,'id','label_id');
+    }
 }

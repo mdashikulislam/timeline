@@ -11,7 +11,10 @@ class MainController extends Controller
 {
     public function index()
     {
-        $timeline = Timeline::orderBy('created_at','ASC')->get();
+        $timeline = Timeline::with(['items'=>function($q){
+            $q->orderByDesc('date_time');
+            $q->with('labels');
+        }])->orderBy('created_at','ASC')->get();
         $labels = Label::all();
         return view('main')
             ->with([
