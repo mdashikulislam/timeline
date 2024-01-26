@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Timeline extends Model
+class TimelineItem extends Model
 {
     use SoftDeletes;
-    protected $table = 'timelines';
+    protected $table = 'timeline_items';
 }

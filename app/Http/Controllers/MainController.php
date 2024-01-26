@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Timeline;
+use App\Models\TimelineItem;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
     public function index()
     {
-        $timeline = Timeline::orderByDesc('date_time')->get();
+        $timeline = TimelineItem::orderByDesc('date_time')->get();
         return view('main')
             ->with([
                 'timelines'=>$timeline
@@ -19,7 +20,7 @@ class MainController extends Controller
     public function store(Request $request)
     {
         $datetime = $request->date.' '.$request->time;
-        $timeline = new Timeline();
+        $timeline = new TimelineItem();
         $timeline->title = $request->title;
         $timeline->date = $request->date;
         $timeline->time = $request->time;
@@ -46,7 +47,7 @@ class MainController extends Controller
 
     public function delete($id)
     {
-        $exist = Timeline::where('id',$id)->first();
+        $exist = TimelineItem::where('id',$id)->first();
         if (empty($exist)){
             toast('Timeline not found','error');
             return redirect()->back();
@@ -58,7 +59,7 @@ class MainController extends Controller
 
     public function deleteAttachment($id)
     {
-        $exist = Timeline::where('id',$id)->first();
+        $exist = TimelineItem::where('id',$id)->first();
         if (empty($exist)){
             toast('Timeline not found','error');
             return redirect()->back();
@@ -126,7 +127,7 @@ class MainController extends Controller
 
     public function update(Request $request)
     {
-        $timeline = Timeline::where('id',$request->id)->first();
+        $timeline = TimelineItem::where('id',$request->id)->first();
         if (empty($timeline)){
             toast('Timeline not found','error');
             return redirect()->back();
