@@ -84,6 +84,17 @@
 </head>
 <body>
 <div class="container mt-5">
+    <div class="row mb-3">
+        <div class="col-lg-12">
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-falcon-danger" onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();" href="#"><i class="fa-solid fa-right-from-bracket fa-fw"></i>Logout</a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="row mb-5">
         <div class="col-lg-6 col-12">
             <div class="card h-lg-100 overflow-hidden mb-5">
@@ -221,7 +232,10 @@
                                             $copyLink = route('shared.timeline',['id'=>(base64_encode($timeline->id))]);
                                         @endphp
                                         <input type="hidden" id="copy-{{$timeline->id}}" value="{{$copyLink}}">
-                                        <a data-toggle="popover" data-bs-container="body" data-bs-placement="top" data-trigger="manual" title="Copied" class="btn btn-dark copy-btn" data-id="{{$timeline->id}}" href="#"><i class="fa-solid fa-share-from-square fa-fw"></i>Share</a>
+                                        <div class="btn-group">
+                                            <a data-toggle="popover" data-bs-container="body" data-bs-placement="top" data-trigger="manual" title="Copied" class="btn btn-dark copy-btn" data-id="{{$timeline->id}}" href="#"><i class="fa-solid fa-share-from-square fa-fw"></i>Share</a>
+                                            <a target="_blank" href="{{$copyLink}}" class="btn btn-warning text-white "><i class="fa-solid fa-eye fa-fw"></i>View</a>
+                                        </div>
                                     </div>
                                     @forelse($timeline->items as $key => $item)
                                         @php
