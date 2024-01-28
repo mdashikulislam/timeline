@@ -43,4 +43,16 @@ class TimelineController extends Controller
         toast('Timeline delete successfully','success');
         return redirect()->back();
     }
+
+    public function timeline($id)
+    {
+        $id = base64_decode($id);
+        $timeline = Timeline::where('id',$id)->first();
+        if (empty($timeline)){
+            abort(404);
+        }
+        return view('timeline')->with([
+           'timeline'=>$timeline
+        ]);
+    }
 }

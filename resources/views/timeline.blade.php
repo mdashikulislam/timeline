@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>{{$timeline->name}}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{{asset('theme.min.css')}}">
@@ -84,223 +84,70 @@
 </head>
 <body>
 <div class="container mt-5">
-    <div class="row mb-5">
-        <div class="col-lg-6 col-12">
-            <div class="card h-lg-100 overflow-hidden mb-5">
-                <div class="card-header bg-body-tertiary">
-                    <div class="d-flex justify-content-between align-items-center ">
-                        <h5 class="mb-0 d-inline">Timeline</h5>
-                        <a data-bs-toggle="modal" data-bs-target="#add-timeline-modal" href="#"
-                           class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw"></i>Add New</a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive scrollbar">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Created</th>
-                                <th class="text-end" scope="col">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($timelines as $timeline)
-                                <tr>
-                                    <td>{{$timeline->name}}</td>
-                                    <td>{{$timeline->created_at->format('Y-m-d H:i:s')}}</td>
-                                    <td class="text-end">
-                                        <div>
-                                            <a data-title="{{$timeline->name}}" data-id="{{$timeline->id}}"
-                                               class="btn btn-link edit-timeline p-0" type="button"
-                                               data-bs-toggle="tooltip"
-                                               data-bs-placement="top" title="Edit"><span
-                                                    class="text-500 fas fa-edit"></span></a>
-                                            <a href="{{route('timeline.delete',['id'=>$timeline->id])}}"
-                                               class="btn btn-link p-0 ms-2 delete-timeline" type="button"
-                                               data-bs-toggle="tooltip"
-                                               data-bs-placement="top" title="Delete"><span
-                                                    class="text-500 fas fa-trash-alt"></span></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                            @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-12">
-            <div class="card h-lg-100 overflow-hidden mb-5">
-                <div class="card-header bg-body-tertiary">
-                    <div class="d-flex justify-content-between align-items-center ">
-                        <h5 class="mb-0 d-inline">Label</h5>
-                        <a data-bs-toggle="modal" data-bs-target="#add-label-modal" href="#"
-                           class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw"></i>Add New</a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive scrollbar">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Color</th>
-                                <th scope="col">Created</th>
-                                <th class="text-end" scope="col">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($labels as $label)
-                                <tr>
-                                    <td>{{$label->name}}</td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar"
-                                                 style="width: 100%;background: {{$label->color}}"></div>
-                                        </div>
-                                    </td>
-                                    <td>{{$label->created_at->format('Y-m-d H:i:s')}}</td>
-                                    <td class="text-end">
-                                        <div>
-                                            <a data-id="{{$label->id}}" data-name="{{$label->name}}"
-                                               data-color="{{$label->color}}" class="btn btn-link p-0 edit-label"
-                                               type="button" data-bs-toggle="tooltip"
-                                               data-bs-placement="top" title="Edit"><span
-                                                    class="text-500 fas fa-edit"></span></a>
-                                            <a href="{{route('label.delete',['id'=>$label->id])}}"
-                                               class="btn btn-link delete-label p-0 ms-2" type="button"
-                                               data-bs-toggle="tooltip"
-                                               data-bs-placement="top" title="Delete"><span
-                                                    class="text-500 fas fa-trash-alt"></span></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                            @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="row mb-3">
         <div class="col-lg-12">
             <div class="card mb-3">
                 <div class="card-header bg-body-tertiary">
-                    <div class="d-flex justify-content-end align-items-center ">
-                        <a data-bs-toggle="modal" data-bs-target="#add-modal" href="#" class="btn btn-success btn-sm"><i
-                                class="fas fa-plus fa-fw"></i>Add New</a>
-                    </div>
+                    <h5 class="mb-0 d-inline">{{$timeline->name}}</h5>
                 </div>
                 <div class="card-body">
-                    <nav>
-                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            @forelse($timelines as $key => $timeline)
-                                <button style="font-size: 20px" class="nav-link {{$key == '0' ? 'active':''}}"
-                                        id="nav-home-tab-{{$timeline->id}}"
-                                        data-bs-toggle="tab" data-bs-target="#nav-home-{{$timeline->id}}" type="button"
-                                        role="tab" aria-controls="nav-home"
-                                        aria-selected="true">{{$timeline->name}}</button>
-                            @empty
-                            @endforelse
-
-                        </div>
-                    </nav>
-                    <div class="tab-content" id="nav-tabContent">
-                        @forelse($timelines as $key => $timeline)
-                            <div class="tab-pane fade {{$key == '0' ? 'show active':''}} "
-                                 id="nav-home-{{$timeline->id}}"
-                                 role="tabpanel" aria-labelledby="nav-home-tab">
-                                <div class="timeline-vertical">
-                                    <div class="d-flex justify-content-end">
-                                        @php
-                                            $copyLink = route('shared.timeline',['id'=>(base64_encode($timeline->id))]);
-                                        @endphp
-                                        <input type="hidden" id="copy-{{$timeline->id}}" value="{{$copyLink}}">
-                                        <a data-toggle="popover" data-bs-container="body" data-bs-placement="top" data-trigger="manual" title="Copied" class="btn btn-dark copy-btn" data-id="{{$timeline->id}}" href="#"><i class="fa-solid fa-share-from-square fa-fw"></i>Share</a>
+                    <div class="timeline-vertical">
+                        @forelse($timeline->items as $key => $item)
+                            @php
+                                $dir = 'start';
+                                if ($key % 2 != 0){
+                                   $dir = 'end';
+                                }
+                            @endphp
+                            <div class="timeline-item timeline-item-{{$dir}}">
+                                <div
+                                    class="timeline-icon icon-item icon-item-lg text-primary border-300"><span
+                                        style="color:#800080"
+                                        class="fs-8 fas fa-minus"></span></div>
+                                <div class="row">
+                                    <div class="col-lg-6 timeline-item-time">
+                                        <div>
+                                            <p class="fs-14 text-600 fw-semibold">{{\Carbon\Carbon::parse($item->date_time)->format('d-m-y h:i a')}}</p>
+                                        </div>
                                     </div>
-                                    @forelse($timeline->items as $key => $item)
-                                        @php
-                                            $dir = 'start';
-                                            if ($key % 2 != 0){
-                                               $dir = 'end';
-                                            }
-                                        @endphp
-                                        <div class="timeline-item timeline-item-{{$dir}}">
-
-                                            <div
-                                                class="timeline-icon icon-item icon-item-lg text-primary border-300"><span
-                                                    style="color:#800080"
-                                                    class="fs-8 fas fa-minus"></span></div>
-                                            <div class="row">
-                                                <div class="col-lg-6 timeline-item-time">
+                                    <div class="col-lg-6">
+                                        <div class="timeline-item-content">
+                                            <div class="timeline-item-card"
+                                                 style="background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);color:#fff">
+                                                @if(@$item->labels()->exists())
+                                                    <h4 class="m-0"><span class="badge rounded-pill mb-2" style="color:#fff;background: {{$item->labels->color}}">{{$item->labels->name}}</span></h4>
+                                                @endif
+                                                <h5 class="mb-2" style="color:#fff">{{$item->title}}</h5>
+                                                @if($item->comment)
                                                     <div>
-                                                        <p class="fs-14 text-600 fw-semibold">{{\Carbon\Carbon::parse($item->date_time)->format('d-m-y h:i a')}}</p>
+                                                        <p class="mb-0"><strong>Comment:</strong></p>
+                                                        <p>{{$item->comment}}</p>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="timeline-item-content">
-                                                        <div class="timeline-item-card"
-                                                             style="background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);color:#fff">
-                                                            @if(@$item->labels()->exists())
-                                                            <h4 class="m-0"><span class="badge rounded-pill mb-2" style="color:#fff;background: {{$item->labels->color}}">{{$item->labels->name}}</span></h4>
-                                                            @endif
-                                                            <h5 class="mb-2" style="color:#fff">{{$item->title}}</h5>
-                                                            @if($item->comment)
-                                                                <div>
-                                                                    <p class="mb-0"><strong>Comment:</strong></p>
-                                                                    <p>{{$item->comment}}</p>
-                                                                </div>
-                                                            @endif
-                                                            @if($item->attachment)
-                                                                <p class="m-0"><strong>Attachment</strong></p>
-                                                                <div class="btn-group mt-1">
-                                                                    <a data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                       data-bs-original-title="View" target="_blank"
-                                                                       class="btn btn-info btn-sm"
-                                                                       href="{{asset('storage/'.$item->attachment)}}"><i
-                                                                            class="fas fa-eye"></i></a>
-                                                                    <a data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                       data-bs-original-title="Download" download
-                                                                       class="btn btn-primary btn-sm"
-                                                                       href="{{asset('storage/'.$item->attachment)}}"><i
-                                                                            class="fas fa-download"></i></a>
-                                                                    <a data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                       data-bs-original-title="Attachment delete"
-                                                                       class="btn btn-danger btn-sm delete-attachment"
-                                                                       href="{{route('delete-attachment-data',['id'=>$item->id])}}"><i
-                                                                            class="fas fa-trash"></i></a>
-                                                                </div>
-                                                            @endif
-                                                            <div class="action_btn">
-                                                                <div class="btn-group">
-                                                                    <a data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                       data-bs-original-title="Edit" href="#"
-                                                                       data-id="{{$item->id}}"
-                                                                       class="btn btn-warning btn-sm edit"><i
-                                                                            class="fas fa-edit"></i></a>
-                                                                    <a data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                       data-bs-original-title="Delete"
-                                                                       href="{{route('delete',['id'=>$item->id])}}"
-                                                                       class="btn btn-danger btn-sm delete"><i
-                                                                            class="fas fa-trash"></i></a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                @endif
+                                                @if($item->attachment)
+                                                    <p class="m-0"><strong>Attachment</strong></p>
+                                                    <div class="btn-group mt-1">
+                                                        <a data-bs-toggle="tooltip" data-bs-placement="top"
+                                                           data-bs-original-title="View" target="_blank"
+                                                           class="btn btn-info btn-sm"
+                                                           href="{{asset('storage/'.$item->attachment)}}"><i
+                                                                class="fas fa-eye"></i></a>
+                                                        <a data-bs-toggle="tooltip" data-bs-placement="top"
+                                                           data-bs-original-title="Download" download
+                                                           class="btn btn-primary btn-sm"
+                                                           href="{{asset('storage/'.$item->attachment)}}"><i
+                                                                class="fas fa-download"></i></a>
                                                     </div>
-                                                </div>
+                                                @endif
+
                                             </div>
                                         </div>
-                                    @empty
-                                    @endforelse
+                                    </div>
                                 </div>
                             </div>
                         @empty
                         @endforelse
+                    </div>
                     </div>
                 </div>
             </div>
@@ -460,7 +307,7 @@
             </div>
         </div>
     </div>
-</div>
+
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
@@ -608,21 +455,6 @@
                     }
                 })
             })
-            $(document).on('click','.copy-btn',function (e){
-               e.preventDefault();
-               var id = $(this).data('id');
-               var hiddenInputValue = document.getElementById('copy-'+id).value;
-                var tempTextarea = document.createElement('textarea');
-                tempTextarea.value = hiddenInputValue;
-                document.body.appendChild(tempTextarea);
-                tempTextarea.select();
-                document.execCommand('copy');
-                $(this).popover('show');
-                var copyBtn = $(this);
-                setTimeout(function() {
-                    copyBtn.popover('hide');
-                }, 2000);
-            });
 
             function appendForm() {
                 console.log('as')
