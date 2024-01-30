@@ -88,7 +88,13 @@
         <div class="col-lg-12">
             <div class="card mb-3">
                 <div class="card-header bg-body-tertiary">
-                    <h5 class="mb-0 d-inline">{{$timeline->name}}</h5>
+                    <div class="d-flex justify-content-between align-items-center ">
+                        <h5 class="mb-0 d-inline">{{$timeline->name}} @if(!empty($timeline->first_name))
+                                ({{ $timeline->first_name.' '.$timeline->last_name }})
+                            @endif</h5>
+                        <a data-bs-toggle="modal" data-bs-target="#add-modal" href="#"
+                           class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw"></i>Add New</a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="timeline-vertical">
@@ -107,7 +113,7 @@
                                 <div class="row">
                                     <div class="col-lg-6 timeline-item-time">
                                         <div>
-                                            <p class="fs-14 text-600 fw-semibold">{{\Carbon\Carbon::parse($item->date_time)->format('d-m-y h:i a')}}</p>
+                                            <p class="fs-14 text-600 fw-semibold">{{\Carbon\Carbon::parse($item->date_time)->format('m/d/y h:i a')}}</p>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -137,9 +143,31 @@
                                                            class="btn btn-primary btn-sm"
                                                            href="{{asset('storage/'.$item->attachment)}}"><i
                                                                 class="fas fa-download"></i></a>
+                                                        @if($timeline->is_edit == 'Active')
+                                                        <a data-bs-toggle="tooltip" data-bs-placement="top"
+                                                           data-bs-original-title="Attachment delete"
+                                                           class="btn btn-danger btn-sm delete-attachment"
+                                                           href="{{route('delete-attachment-data',['id'=>$item->id])}}"><i
+                                                                class="fas fa-trash"></i></a>
+                                                        @endif
                                                     </div>
                                                 @endif
-
+                                                    @if($timeline->is_edit == 'Active')
+                                                        <div class="action_btn">
+                                                            <div class="btn-group">
+                                                                <a data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                   data-bs-original-title="Edit" href="#"
+                                                                   data-id="{{$item->id}}"
+                                                                   class="btn btn-warning btn-sm edit"><i
+                                                                        class="fas fa-edit"></i></a>
+                                                                <a data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                   data-bs-original-title="Delete"
+                                                                   href="{{route('delete',['id'=>$item->id])}}"
+                                                                   class="btn btn-danger btn-sm delete"><i
+                                                                        class="fas fa-trash"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    @endif
                                             </div>
                                         </div>
                                     </div>
@@ -253,19 +281,12 @@
                             <h4 class="mb-1" id="modalExampleDemoLabel">Add a new timeline item</h4>
                         </div>
                         <div class="p-4 pb-0">
-                            <div class="row mb-3">
-                                <div class="col-lg-6">
-                                    <label class="col-form-label" for="recipient-name">Select Timeline:</label>
-                                    <select name="timeline" class="form-select" required>
-                                        {!! getTimelineDropdown() !!}
-                                    </select>
-                                </div>
-                                <div class="col-lg-6">
-                                    <label class="col-form-label" for="recipient-name">Select Label:</label>
-                                    <select name="label" class="form-select">
-                                        {!! getLabelDropdown() !!}
-                                    </select>
-                                </div>
+                            <input type="hidden" name="timeline" value="{{$timeline->id}}">
+                            <div class="mb-3">
+                                <label class="col-form-label" for="recipient-name">Select Label:</label>
+                                <select name="label" class="form-select">
+                                    {!! getLabelDropdown() !!}
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label class="col-form-label" for="recipient-name">Title:</label>

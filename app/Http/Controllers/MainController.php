@@ -7,6 +7,7 @@ use App\Models\Label;
 use App\Models\Timeline;
 use App\Models\TimelineItem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MainController extends Controller
 {
@@ -26,6 +27,15 @@ class MainController extends Controller
 
     public function store(Request $request)
     {
+        $timeline = Timeline::where('id',$request->timeline)->first();
+        if (empty($timeline)){
+            toast('Timeline not found','error');
+            return redirect()->back();
+        }
+        if (!Auth::check() && $timeline->is_edit == 'Inactive'){
+            toast('you are not allowed to perform this action','error');
+            return redirect()->back();
+        }
 
         $datetime = $request->date.' '.$request->time;
         $timeline = new TimelineItem();
@@ -57,11 +67,17 @@ class MainController extends Controller
 
     public function delete($id)
     {
-        $exist = TimelineItem::where('id',$id)->first();
+        $exist = TimelineItem::with('timeline')->whereHas('timeline')->where('id',$id)->first();
         if (empty($exist)){
             toast('Timeline item not found','error');
             return redirect()->back();
         }
+
+        if (!Auth::check() && $exist->timeline->is_edit == 'Inactive'){
+            toast('you are not allowed to perform this action','error');
+            return redirect()->back();
+        }
+
         $exist->delete();
         toast('Timeline item delete successful','success');
         return redirect()->back();
@@ -69,14 +85,19 @@ class MainController extends Controller
 
     public function deleteAttachment($id)
     {
-        $exist = TimelineItem::where('id',$id)->first();
+        $exist = TimelineItem::with('timeline')->whereHas('timeline')->where('id',$id)->first();
         if (empty($exist)){
             toast('Timeline item not found','error');
             return redirect()->back();
         }
-        $exist->attachment = '';
-        $exist->save();
-        toast('Attachment delete successful','success');
+        if (Auth::check() || $exist->timeline->is_edit == 'Active'){
+            $exist->attachment = '';
+            $exist->save();
+            toast('Attachment delete successful','success');
+        }else{
+            toast('you are not allowed to perform this action','error');
+        }
+
         return redirect()->back();
     }
     public function editData(Request $request)
@@ -88,9 +109,7 @@ class MainController extends Controller
                 'data'=>null
             ]);
         }
-        return response()->json([
-            'status'=>true,
-            'data'=>'<div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+        $html =  '<div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
                 <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
                         data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -101,22 +120,32 @@ class MainController extends Controller
                     <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
                         <h4 class="mb-1" id="modalExampleDemoLabel">Edit timeline item </h4>
                     </div>
-                    <div class="p-4 pb-0">
-                        <div class="row mb-3">
-                                <div class="col-lg-6">
-                                    <label class="col-form-label" for="recipient-name">Select Timeline:</label>
-                                    <select name="timeline" class="form-select" required>
-                                        '.getTimelineDropdown($exist->timeline_id).'
-                                    </select>
-                                </div>
-                                <div class="col-lg-6">
-                                    <label class="col-form-label" for="recipient-name">Select Label:</label>
-                                    <select name="label" class="form-select">
-                                        '.getLabelDropdown($exist->label_id).'
-                                    </select>
-                                </div>
-                        </div>
-                        <div class="mb-3">
+                    <div class="p-4 pb-0">';
+                        if (Auth::check()){
+                            $html .='<div class="row mb-3">
+                                    <div class="col-lg-6">
+                                        <label class="col-form-label" for="recipient-name">Select Timeline:</label>
+                                        <select name="timeline" class="form-select" required>
+                                            '.getTimelineDropdown($exist->timeline_id).'
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label class="col-form-label" for="recipient-name">Select Label:</label>
+                                        <select name="label" class="form-select">
+                                            '.getLabelDropdown($exist->label_id).'
+                                        </select>
+                                    </div>
+                            </div>';
+                        }else{
+                            $html .='<input type="hidden" name="timeline" value="'.$exist->timeline->id.'"><div class="mb-3">
+                                        <label class="col-form-label" for="recipient-name">Select Label:</label>
+                                        <select name="label" class="form-select">
+                                            '.getLabelDropdown($exist->label_id).'
+                                        </select>
+                                    </div>';
+                        }
+
+                    $html .='<div class="mb-3">
                             <label class="col-form-label" for="recipient-name">Title:</label>
                             <input class="form-control" name="title"  type="text" value="'.$exist->title.'" required/>
                         </div>
@@ -145,17 +174,26 @@ class MainController extends Controller
                     <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
                     <button class="btn btn-primary" type="submit">Save</button>
                 </div>
-            </form>'
+            </form>';
+        return response()->json([
+            'status'=>true,
+            'data'=>$html
         ]);
     }
 
     public function update(Request $request)
     {
-        $timeline = TimelineItem::where('id',$request->id)->first();
+        $timeline = TimelineItem::with('timeline')->whereHas('timeline')->where('id',$request->id)->first();
         if (empty($timeline)){
             toast('Timeline item not found','error');
             return redirect()->back();
         }
+
+        if (!Auth::check() && $timeline->is_edit == 'Inactive'){
+            toast('you are not allowed to perform this action','error');
+            return redirect()->back();
+        }
+
         $datetime = $request->date.' '.$request->time;
         $timeline->title = $request->title;
         $timeline->date = $request->date;

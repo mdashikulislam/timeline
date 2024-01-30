@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Timeline;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TimelineController extends Controller
 {
     public function store(Request $request)
     {
+
         $timeline = new Timeline();
         $timeline->name = $request->title;
         $timeline->first_name = $request->first_name;
@@ -55,7 +57,9 @@ class TimelineController extends Controller
     public function timeline($id)
     {
         $id = base64_decode($id);
-        $timeline = Timeline::where('id',$id)->first();
+        $timeline = Timeline::with(['items'=>function($q){
+            $q->orderByDesc('date_time');
+        }])->where('id',$id)->first();
         if (empty($timeline)){
             abort(404);
         }
