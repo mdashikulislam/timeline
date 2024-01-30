@@ -29,3 +29,18 @@ function getLabelDropdown($selected = 0): string
     }
     return $html;
 }
+function getStatusDropdown($selected = 0): string
+{
+    $options = ['Inactive','Active'];
+    $html = '<option value="">Select Status</option>';
+    if (!empty($options)){
+        foreach ($options as $item){
+            $html .='<option value="'.$item.'"';
+            if ($item == $selected){
+                $html .=' selected ';
+            }
+            $html .=' >'.$item.'</option>';
+        }
+    }
+    return $html;
+}

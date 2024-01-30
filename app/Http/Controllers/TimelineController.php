@@ -11,6 +11,10 @@ class TimelineController extends Controller
     {
         $timeline = new Timeline();
         $timeline->name = $request->title;
+        $timeline->first_name = $request->first_name;
+        $timeline->last_name = $request->last_name;
+        $timeline->email = $request->email;
+        $timeline->is_edit = $request->is_edit;
         if ($timeline->save()){
             toast('Timeline add successfully','success');
         }else{

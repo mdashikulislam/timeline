@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 Route::middleware('auth')->group(function (){
     Route::get('/', [\App\Http\Controllers\MainController::class,'index']);
-    Route::post('add-timeline',[\App\Http\Controllers\MainController::class,'store'])->name('store');
+    Route::post('add-timeline-item',[\App\Http\Controllers\MainController::class,'store'])->name('store');
     Route::get('delete-timeline/{id}',[\App\Http\Controllers\MainController::class,'delete'])->name('delete');
     Route::post('edit-data',[\App\Http\Controllers\MainController::class,'editData'])->name('edit-data');
     Route::post('update-data',[\App\Http\Controllers\MainController::class,'update'])->name('update-data');
@@ -34,7 +34,4 @@ Route::middleware('auth')->group(function (){
 });
 
 Route::get('timeline/{id}',[\App\Http\Controllers\TimelineController::class,'timeline'])->name('shared.timeline');
-
-
-
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
