@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendMail;
 use App\Models\Label;
 use App\Models\Timeline;
 use App\Models\TimelineItem;
@@ -182,7 +183,8 @@ class MainController extends Controller
             return redirect()->back();
         }
         $email = $request->email;
-
-        return \request()->all();
+        \Mail::to($email)->send(new SendMail($request->link));
+        toast('Mail send successfully','success');
+        return redirect()->back();
     }
 }
