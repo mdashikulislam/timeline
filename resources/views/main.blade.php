@@ -130,7 +130,7 @@
                                     <td>{{$timeline->last_name}}</td>
                                     <td>{{$timeline->email}}</td>
                                     <td><span
-                                            class="badge {{$timeline->is_edit == 'active' ? 'bg-success':'bg-danger' }}">{{$timeline->is_edit}}</span>
+                                            class="badge {{$timeline->is_edit == 'Active' ? 'bg-success':'bg-danger' }}">{{$timeline->is_edit}}</span>
                                     </td>
                                     <td>{{$timeline->created_at->format('m/d/Y H:i:s')}}</td>
                                     <td class="text-end">
@@ -156,6 +156,7 @@
                                                 </div>
                                                 <form action="{{route('timeline.update')}}" method="POST" id="edit-timeline-body">
                                                     @csrf
+                                                    <input type="hidden" name="id" value="{{$timeline->id}}">
                                                     <div class="modal-body p-0">
                                                         <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
                                                             <h4 class="mb-1" id="modalExampleDemoLabel">Edit timeline </h4>
@@ -727,30 +728,6 @@
             });
         }
 
-        $(document).on('click', '.edit-timeline', function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            var title = $(this).data('title');
-            var token = '{{csrf_token()}}';
-            $('#edit-timeline-body').html(`<div class="modal-body p-0">
-                    <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
-                        <h4 class="mb-1" id="modalExampleDemoLabel">Edit timeline </h4>
-                    </div>
-                    <div class="p-4 pb-0">
-                        <input type="hidden" name="id" value="${id}">
-                        <input type="hidden" name="_token" value="${token}">
-                        <div class="mb-3">
-                            <label class="col-form-label" for="recipient-name">Timeline Name:</label>
-                            <input class="form-control" name="title" value="${title}" type="text" required/>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary" type="submit">Updaate</button>
-                </div>`);
-            $('#edit-timeline-modal').modal('show');
-        });
         $(document).on('click', '.edit-label', function (e) {
             e.preventDefault();
             var id = $(this).data('id');

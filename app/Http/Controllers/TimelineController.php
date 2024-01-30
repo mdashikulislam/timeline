@@ -31,6 +31,10 @@ class TimelineController extends Controller
             return redirect()->back();
         }
         $timeline->name = $request->title;
+        $timeline->first_name = $request->first_name;
+        $timeline->last_name = $request->last_name;
+        $timeline->email = $request->email;
+        $timeline->is_edit = $request->is_edit;
         $timeline->save();
         toast('Timeline update successfully','success');
         return redirect()->back();
