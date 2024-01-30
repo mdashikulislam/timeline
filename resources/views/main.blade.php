@@ -147,39 +147,53 @@
                                                     class="text-500 fas fa-trash-alt"></span></a>
                                         </div>
                                     </td>
-                                    <div class="modal fade" id="edit-timeline-modal-{{$timeline->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal fade" id="edit-timeline-modal-{{$timeline->id}}" tabindex="-1"
+                                         role="dialog" aria-hidden="true">
                                         <div class="modal-dialog " role="document" style="max-width: 500px">
                                             <div class="modal-content position-relative">
                                                 <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
-                                                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
-                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    <button
+                                                        class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                                        data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <form action="{{route('timeline.update')}}" method="POST" id="edit-timeline-body">
+                                                <form action="{{route('timeline.update')}}" method="POST"
+                                                      id="edit-timeline-body">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{$timeline->id}}">
                                                     <div class="modal-body p-0">
                                                         <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
-                                                            <h4 class="mb-1" id="modalExampleDemoLabel">Edit timeline </h4>
+                                                            <h4 class="mb-1" id="modalExampleDemoLabel">Edit
+                                                                timeline </h4>
                                                         </div>
                                                         <div class="p-4 pb-0">
                                                             <div class="mb-3">
-                                                                <label class="col-form-label" for="recipient-name">Timeline Name:</label>
-                                                                <input value="{{$timeline->name}}" class="form-control" name="title" type="text" required/>
+                                                                <label class="col-form-label" for="recipient-name">Timeline
+                                                                    Name:</label>
+                                                                <input value="{{$timeline->name}}" class="form-control"
+                                                                       name="title" type="text" required/>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label class="col-form-label" for="recipient-name">First Name:</label>
-                                                                <input value="{{$timeline->first_name}}" class="form-control" name="first_name" type="text" required/>
+                                                                <label class="col-form-label" for="recipient-name">First
+                                                                    Name:</label>
+                                                                <input value="{{$timeline->first_name}}"
+                                                                       class="form-control" name="first_name"
+                                                                       type="text" required/>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label class="col-form-label" for="recipient-name">Last Name:</label>
-                                                                <input value="{{$timeline->last_name}}" class="form-control" name="last_name" type="text" required/>
+                                                                <label class="col-form-label" for="recipient-name">Last
+                                                                    Name:</label>
+                                                                <input value="{{$timeline->last_name}}"
+                                                                       class="form-control" name="last_name" type="text"
+                                                                       required/>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label class="col-form-label" for="recipient-name">Email:</label>
-                                                                <input value="{{$timeline->email}}" class="form-control" name="email" type="text" required/>
+                                                                <input value="{{$timeline->email}}" class="form-control"
+                                                                       name="email" type="text" required/>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label class="col-form-label" for="recipient-name">Editable Status:</label>
+                                                                <label class="col-form-label" for="recipient-name">Editable
+                                                                    Status:</label>
                                                                 <select name="is_edit" class="form-control">
                                                                     {!! getStatusDropdown($timeline->is_edit) !!}
                                                                 </select>
@@ -187,7 +201,9 @@
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                                                        <button class="btn btn-secondary" type="button"
+                                                                data-bs-dismiss="modal">Close
+                                                        </button>
                                                         <button class="btn btn-primary" type="submit">Save</button>
                                                     </div>
                                                 </form>
@@ -275,7 +291,9 @@
                                         id="nav-home-tab-{{$timeline->id}}"
                                         data-bs-toggle="tab" data-bs-target="#nav-home-{{$timeline->id}}" type="button"
                                         role="tab" aria-controls="nav-home"
-                                        aria-selected="true">{{$timeline->name}} @if(!empty($timeline->first_name)) ({{ $timeline->first_name.' '.$timeline->last_name }}) @endif</button>
+                                        aria-selected="true">{{$timeline->name}} @if(!empty($timeline->first_name))
+                                        ({{ $timeline->first_name.' '.$timeline->last_name }})
+                                    @endif</button>
                             @empty
                             @endforelse
 
@@ -293,6 +311,8 @@
                                         @endphp
                                         <input type="hidden" id="copy-{{$timeline->id}}" value="{{$copyLink}}">
                                         <div class="btn-group">
+                                            <a data-link="{{$copyLink}}" data-id="{{$timeline->id}}" data-email="{{$timeline->email}}" href="#" class="btn btn-info text-white send-mail"><i
+                                                    class="fa-solid fa-envelope fa-fw"></i>Share by email</a>
                                             <a data-toggle="popover" data-bs-container="body" data-bs-placement="top"
                                                data-trigger="manual" title="Copied" class="btn btn-dark copy-btn"
                                                data-id="{{$timeline->id}}" href="#"><i
@@ -546,6 +566,19 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="send-mail-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog " role="document" style="max-width: 500px">
+            <div class="modal-content position-relative">
+                <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{route('send-by-email')}}" method="POST" id="send-mail-body">
+
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
@@ -617,6 +650,31 @@
                     window.location.href = link;
                 }
             });
+        })
+        $(document).on('click','.send-mail',function (e){
+            e.preventDefault();
+            var id = $(this).data('id');
+            var link = $(this).data('link');
+            var email = $(this).data('email') ? $(this).data('email') : '';
+            var token = '{{csrf_token()}}';
+            $('#send-mail-body').html(`<div class="modal-body p-0">
+                            <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
+                            <h4 class="mb-1" id="modalExampleDemoLabel">Share by email </h4>
+                            </div>
+                            <div class="p-4 pb-0">
+                            <input type="hidden" name="id" value="${id}">
+                            <input type="hidden" name="_token" value="${token}">
+                            <input type="hidden" name="link" value="${link}">
+                            <div class="mb-3">
+                                <label class="form-label">Email Address</label>
+                                <input required type="email" class="form-control" name="email" value="${email}">
+                            </div></div></div>
+                             <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                                <button class="btn btn-primary" type="submit">Send</button>
+                            </div>`);
+            $('#send-mail-modal').modal('show');
+
         })
         $(document).on('click', '.delete-attachment', function (e) {
             e.preventDefault();
@@ -698,11 +756,14 @@
             e.preventDefault();
             var id = $(this).data('id');
             var hiddenInputValue = document.getElementById('copy-' + id).value;
-            var tempTextarea = document.createElement('textarea');
-            tempTextarea.value = hiddenInputValue;
-            document.body.appendChild(tempTextarea);
-            tempTextarea.select();
+            var tempInput = document.createElement('input');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            tempInput.value = hiddenInputValue;
+            document.body.appendChild(tempInput);
+            tempInput.select();
             document.execCommand('copy');
+            document.body.removeChild(tempInput);
             $(this).popover('show');
             var copyBtn = $(this);
             setTimeout(function () {

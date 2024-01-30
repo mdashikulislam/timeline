@@ -173,4 +173,16 @@ class MainController extends Controller
         }
         return redirect()->back();
     }
+
+    public function sendByEmail(Request $request)
+    {
+        $timeline = Timeline::where('id',$request->id)->first();
+        if (empty($timeline)){
+            toast('Timeline not found','error');
+            return redirect()->back();
+        }
+        $email = $request->email;
+
+        return \request()->all();
+    }
 }
