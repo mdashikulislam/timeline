@@ -88,13 +88,20 @@
         <div class="col-lg-12">
             <div class="card mb-3">
                 <div class="card-header bg-body-tertiary">
-                    <div class="d-flex justify-content-between align-items-center ">
+                        @if($timeline->is_edit == 'Active')
+                        <div class="d-flex justify-content-between align-items-center ">
+                            <h5 class="mb-0 d-inline">{{$timeline->name}} @if(!empty($timeline->first_name))
+                                    ({{ $timeline->first_name.' '.$timeline->last_name }})
+                                @endif</h5>
+                            <a data-bs-toggle="modal" data-bs-target="#add-modal" href="#"
+                               class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw"></i>Add New</a>
+                        </div>
+                        @else
                         <h5 class="mb-0 d-inline">{{$timeline->name}} @if(!empty($timeline->first_name))
                                 ({{ $timeline->first_name.' '.$timeline->last_name }})
                             @endif</h5>
-                        <a data-bs-toggle="modal" data-bs-target="#add-modal" href="#"
-                           class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw"></i>Add New</a>
-                    </div>
+                        @endif
+
                 </div>
                 <div class="card-body">
                     <div class="timeline-vertical">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SendMail;
 use App\Models\Timeline;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,9 @@ class TimelineController extends Controller
         $timeline->email = $request->email;
         $timeline->is_edit = $request->is_edit;
         if ($timeline->save()){
+            $copyLink = route('shared.timeline',['id'=>(base64_encode($timeline->id))]);
+            $email = $request->email;
+            \Mail::to($email)->send(new SendMail($copyLink));
             toast('Timeline add successfully','success');
         }else{
             toast('Timeline not add','error');
