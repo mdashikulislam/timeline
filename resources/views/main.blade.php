@@ -228,8 +228,9 @@
             <div class="col-lg-12 d-none nav-home-all" data-id="{{$timeline->id}}" id="nav-home-{{$timeline->id}}">
                 <div class="card mb-3">
                     <div class="card-header bg-body-tertiary">
-                        <div class="d-flex justify-content-end align-items-center ">
-                            <a data-bs-toggle="modal" data-bs-target="#add-modal" href="#"
+                        <div class="d-flex justify-content-between align-items-center ">
+                            <h3>{{$timeline->name}}  @if($timeline->first_name) ({{$timeline->first_name}} {{$timeline->last_name}}) @endif</h3>
+                            <a data-bs-toggle="modal" data-bs-target="#add-modal-{{$timeline->id}}" href="#"
                                class="btn btn-success btn-sm"><i
                                     class="fas fa-plus fa-fw"></i>Add New</a>
                         </div>
@@ -336,6 +337,55 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="add-modal-{{$timeline->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog " role="document" style="max-width: 500px">
+                    <div class="modal-content position-relative">
+                        <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
+                            <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
+                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="{{route('store')}}" method="POST" enctype="multipart/form-data" id="add-form">
+                            @csrf
+                            <div class="modal-body p-0">
+                                <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
+                                    <h4 class="mb-1" id="modalExampleDemoLabel">Add a new timeline item</h4>
+                                </div>
+                                <div class="p-4 pb-0">
+                                    <input type="hidden" name="timeline" value="{{$timeline->id}}">
+                                    <div class="mb-3">
+                                        <label class="col-form-label" for="recipient-name">Title:</label>
+                                        <input class="form-control" name="title" type="text" required/>
+                                    </div>
+                                    <div class="row">
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="col-form-label" for="recipient-name">Date:</label>
+                                            <input class="form-control" name="date" type="date" required/>
+                                        </div>
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="col-form-label" for="recipient-name">Time:</label>
+                                            <input class="form-control" name="time" type="time" required/>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="col-form-label" for="recipient-name">Attachment:</label>
+                                        <input class="form-control" name="file" id="file1" type="file"/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="col-form-label" for="recipient-name">Comment:</label>
+                                        <textarea name="comment" class="form-control"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+                                <button class="btn btn-primary" type="submit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
         @empty
         @endforelse
     </div>
@@ -431,67 +481,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="add-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog " role="document" style="max-width: 500px">
-            <div class="modal-content position-relative">
-                <div class="position-absolute top-0 end-0 mt-2 me-2 z-1">
-                    <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base"
-                            data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{route('store')}}" method="POST" enctype="multipart/form-data" id="add-form">
-                    @csrf
-                    <div class="modal-body p-0">
-                        <div class="rounded-top-3 py-3 ps-4 pe-6 bg-body-tertiary">
-                            <h4 class="mb-1" id="modalExampleDemoLabel">Add a new timeline item</h4>
-                        </div>
-                        <div class="p-4 pb-0">
-                            <div class="row mb-3">
-                                <div class="col-lg-6">
-                                    <label class="col-form-label" for="recipient-name">Select Timeline:</label>
-                                    <select name="timeline" class="form-select" required>
-                                        {!! getTimelineDropdown() !!}
-                                    </select>
-                                </div>
-                                <div class="col-lg-6">
-                                    <label class="col-form-label" for="recipient-name">Select Label:</label>
-                                    <select name="label" class="form-select">
-                                        {!! getLabelDropdown() !!}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="col-form-label" for="recipient-name">Title:</label>
-                                <input class="form-control" name="title" type="text" required/>
-                            </div>
-                            <div class="row">
-                                <div class="mb-3 col-lg-6">
-                                    <label class="col-form-label" for="recipient-name">Date:</label>
-                                    <input class="form-control" name="date" type="date" required/>
-                                </div>
-                                <div class="mb-3 col-lg-6">
-                                    <label class="col-form-label" for="recipient-name">Time:</label>
-                                    <input class="form-control" name="time" type="time" required/>
-                                </div>
-                            </div>
 
-                            <div class="mb-3">
-                                <label class="col-form-label" for="recipient-name">Attachment:</label>
-                                <input class="form-control" name="file" id="file1" type="file"/>
-                            </div>
-                            <div class="mb-3">
-                                <label class="col-form-label" for="recipient-name">Comment:</label>
-                                <textarea name="comment" class="form-control"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-primary" type="submit">Save</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
     <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog " role="document" style="max-width: 500px">
             <div class="modal-content position-relative">

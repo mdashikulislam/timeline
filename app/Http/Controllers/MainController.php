@@ -45,7 +45,6 @@ class MainController extends Controller
         $timeline->date_time = $datetime;
         $timeline->comment = $request->comment;
         $timeline->timeline_id = $request->timeline;
-        $timeline->label_id = $request->label ?? 0;
         if ($request->file){
             $timeline->attachment = $this->uploadSingleFile($request->file,'attachment','at');
         }
