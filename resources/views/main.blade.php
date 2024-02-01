@@ -164,7 +164,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive scrollbar">
-                        <table class="table">
+                        <table class="table" id="timeline-table">
                             <thead>
                             <tr>
                                 <th scope="col">Timeline Name</th>
@@ -189,8 +189,11 @@
                                     <td>{{$timeline->created_at->format('m/d/Y H:i:s')}}</td>
                                     <td class="text-end">
                                         <div>
+                                            <a  data-id="{{$timeline->id}}"
+                                               class="btn btn-link timeline-view p-0" type="button"><span
+                                                    class="text-500 fas fa-eye"></span></a>
                                             <a data-title="{{$timeline->name}}" data-id="{{$timeline->id}}"
-                                               class="btn btn-link p-0" type="button"
+                                               class="btn btn-link p-0 ms-2" type="button"
                                                data-bs-toggle="modal"
                                                data-bs-target="#edit-timeline-modal-{{$timeline->id}}"><span
                                                     class="text-500 fas fa-edit"></span></a>
@@ -275,136 +278,120 @@
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col-lg-12">
-            <div class="card mb-3">
-                <div class="card-header bg-body-tertiary">
-                    <div class="d-flex justify-content-end align-items-center ">
-                        <a data-bs-toggle="modal" data-bs-target="#add-modal" href="#" class="btn btn-success btn-sm"><i
-                                class="fas fa-plus fa-fw"></i>Add New</a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <nav>
-                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                            @forelse($timelines as $key => $timeline)
-                                <button style="font-size: 20px" class="nav-link {{$key == '0' ? 'active':''}}"
-                                        id="nav-home-tab-{{$timeline->id}}"
-                                        data-bs-toggle="tab" data-bs-target="#nav-home-{{$timeline->id}}" type="button"
-                                        role="tab" aria-controls="nav-home"
-                                        aria-selected="true">{{$timeline->name}} @if(!empty($timeline->first_name))
-                                        ({{ $timeline->first_name.' '.$timeline->last_name }})
-                                    @endif</button>
-                            @empty
-                            @endforelse
-
+        @forelse($timelines as $key => $timeline)
+            <div class="col-lg-12 d-none nav-home-all" data-id="{{$timeline->id}}" id="nav-home-{{$timeline->id}}">
+                <div class="card mb-3">
+                    <div class="card-header bg-body-tertiary">
+                        <div class="d-flex justify-content-end align-items-center ">
+                            <a data-bs-toggle="modal" data-bs-target="#add-modal" href="#"
+                               class="btn btn-success btn-sm"><i
+                                    class="fas fa-plus fa-fw"></i>Add New</a>
                         </div>
-                    </nav>
-                    <div class="tab-content" id="nav-tabContent">
-                        @forelse($timelines as $key => $timeline)
-                            <div class="tab-pane fade {{$key == '0' ? 'show active':''}} "
-                                 id="nav-home-{{$timeline->id}}"
-                                 role="tabpanel" aria-labelledby="nav-home-tab">
-                                <div class="timeline-vertical">
-                                    <div class="d-flex justify-content-end">
-                                        @php
-                                            $copyLink = route('shared.timeline',['id'=>(base64_encode($timeline->id))]);
-                                        @endphp
-                                        <input type="hidden" id="copy-{{$timeline->id}}" value="{{$copyLink}}">
-                                        <div class="btn-group">
-                                            <a data-link="{{$copyLink}}" data-id="{{$timeline->id}}" data-email="{{$timeline->email}}" href="#" class="btn btn-info text-white send-mail"><i
-                                                    class="fa-solid fa-envelope fa-fw"></i>Share by email</a>
-                                            <a data-toggle="popover" data-bs-container="body" data-bs-placement="top"
-                                               data-trigger="manual" title="Copied" class="btn btn-dark copy-btn"
-                                               data-id="{{$timeline->id}}" href="#"><i
-                                                    class="fa-solid fa-share-from-square fa-fw"></i>Share</a>
-                                            <a target="_blank" href="{{$copyLink}}" class="btn btn-warning text-white "><i
-                                                    class="fa-solid fa-eye fa-fw"></i>View</a>
-                                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div >
+                            <div class="timeline-vertical">
+                                <div class="d-flex justify-content-end">
+                                    @php
+                                        $copyLink = route('shared.timeline',['id'=>(base64_encode($timeline->id))]);
+                                    @endphp
+                                    <input type="hidden" id="copy-{{$timeline->id}}" value="{{$copyLink}}">
+                                    <div class="btn-group">
+                                        <a data-link="{{$copyLink}}" data-id="{{$timeline->id}}"
+                                           data-email="{{$timeline->email}}" href="#"
+                                           class="btn btn-info text-white send-mail"><i
+                                                class="fa-solid fa-envelope fa-fw"></i>Share by email</a>
+                                        <a data-toggle="popover" data-bs-container="body" data-bs-placement="top"
+                                           data-trigger="manual" title="Copied" class="btn btn-dark copy-btn"
+                                           data-id="{{$timeline->id}}" href="#"><i
+                                                class="fa-solid fa-share-from-square fa-fw"></i>Share</a>
+                                        <a target="_blank" href="{{$copyLink}}" class="btn btn-warning text-white "><i
+                                                class="fa-solid fa-eye fa-fw"></i>View</a>
                                     </div>
-                                    @forelse($timeline->items as $key => $item)
-                                        @php
-                                            $dir = 'start';
-                                            if ($key % 2 != 0){
-                                               $dir = 'end';
-                                            }
-                                        @endphp
-                                        <div class="timeline-item timeline-item-{{$dir}}">
+                                </div>
+                                @forelse($timeline->items as $key => $item)
+                                    @php
+                                        $dir = 'start';
+                                        if ($key % 2 != 0){
+                                           $dir = 'end';
+                                        }
+                                    @endphp
+                                    <div class="timeline-item timeline-item-{{$dir}}">
 
-                                            <div
-                                                class="timeline-icon icon-item icon-item-lg text-primary border-300"><span
-                                                    style="color:#800080"
-                                                    class="fs-8 fas fa-minus"></span></div>
-                                            <div class="row">
-                                                <div class="col-lg-6 timeline-item-time">
-                                                    <div>
-                                                        <p class="fs-14 text-600 fw-semibold">{{\Carbon\Carbon::parse($item->date_time)->format('d-m-y h:i a')}}</p>
-                                                    </div>
+                                        <div
+                                            class="timeline-icon icon-item icon-item-lg text-primary border-300"><span
+                                                style="color:#800080"
+                                                class="fs-8 fas fa-minus"></span></div>
+                                        <div class="row">
+                                            <div class="col-lg-6 timeline-item-time">
+                                                <div>
+                                                    <p class="fs-14 text-600 fw-semibold">{{\Carbon\Carbon::parse($item->date_time)->format('d-m-y h:i a')}}</p>
                                                 </div>
-                                                <div class="col-lg-6">
-                                                    <div class="timeline-item-content">
-                                                        <div class="timeline-item-card"
-                                                             style="background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);color:#fff">
-                                                            @if(@$item->labels()->exists())
-                                                                <h4 class="m-0"><span class="badge rounded-pill mb-2"
-                                                                                      style="color:#fff;background: {{$item->labels->color}}">{{$item->labels->name}}</span>
-                                                                </h4>
-                                                            @endif
-                                                            <h5 class="mb-2" style="color:#fff">{{$item->title}}</h5>
-                                                            @if($item->comment)
-                                                                <div>
-                                                                    <p class="mb-0"><strong>Comment:</strong></p>
-                                                                    <p>{{$item->comment}}</p>
-                                                                </div>
-                                                            @endif
-                                                            @if($item->attachment)
-                                                                <p class="m-0"><strong>Attachment</strong></p>
-                                                                <div class="btn-group mt-1">
-                                                                    <a data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                       data-bs-original-title="View" target="_blank"
-                                                                       class="btn btn-info btn-sm"
-                                                                       href="{{asset('storage/'.$item->attachment)}}"><i
-                                                                            class="fas fa-eye"></i></a>
-                                                                    <a data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                       data-bs-original-title="Download" download
-                                                                       class="btn btn-primary btn-sm"
-                                                                       href="{{asset('storage/'.$item->attachment)}}"><i
-                                                                            class="fas fa-download"></i></a>
-                                                                    <a data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                       data-bs-original-title="Attachment delete"
-                                                                       class="btn btn-danger btn-sm delete-attachment"
-                                                                       href="{{route('delete-attachment-data',['id'=>$item->id])}}"><i
-                                                                            class="fas fa-trash"></i></a>
-                                                                </div>
-                                                            @endif
-                                                            <div class="action_btn">
-                                                                <div class="btn-group">
-                                                                    <a data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                       data-bs-original-title="Edit" href="#"
-                                                                       data-id="{{$item->id}}"
-                                                                       class="btn btn-warning btn-sm edit"><i
-                                                                            class="fas fa-edit"></i></a>
-                                                                    <a data-bs-toggle="tooltip" data-bs-placement="top"
-                                                                       data-bs-original-title="Delete"
-                                                                       href="{{route('delete',['id'=>$item->id])}}"
-                                                                       class="btn btn-danger btn-sm delete"><i
-                                                                            class="fas fa-trash"></i></a>
-                                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="timeline-item-content">
+                                                    <div class="timeline-item-card"
+                                                         style="background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);color:#fff">
+                                                        @if(@$item->labels()->exists())
+                                                            <h4 class="m-0"><span class="badge rounded-pill mb-2"
+                                                                                  style="color:#fff;background: {{$item->labels->color}}">{{$item->labels->name}}</span>
+                                                            </h4>
+                                                        @endif
+                                                        <h5 class="mb-2" style="color:#fff">{{$item->title}}</h5>
+                                                        @if($item->comment)
+                                                            <div>
+                                                                <p class="mb-0"><strong>Comment:</strong></p>
+                                                                <p>{{$item->comment}}</p>
+                                                            </div>
+                                                        @endif
+                                                        @if($item->attachment)
+                                                            <p class="m-0"><strong>Attachment</strong></p>
+                                                            <div class="btn-group mt-1">
+                                                                <a data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                   data-bs-original-title="View" target="_blank"
+                                                                   class="btn btn-info btn-sm"
+                                                                   href="{{asset('storage/'.$item->attachment)}}"><i
+                                                                        class="fas fa-eye"></i></a>
+                                                                <a data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                   data-bs-original-title="Download" download
+                                                                   class="btn btn-primary btn-sm"
+                                                                   href="{{asset('storage/'.$item->attachment)}}"><i
+                                                                        class="fas fa-download"></i></a>
+                                                                <a data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                   data-bs-original-title="Attachment delete"
+                                                                   class="btn btn-danger btn-sm delete-attachment"
+                                                                   href="{{route('delete-attachment-data',['id'=>$item->id])}}"><i
+                                                                        class="fas fa-trash"></i></a>
+                                                            </div>
+                                                        @endif
+                                                        <div class="action_btn">
+                                                            <div class="btn-group">
+                                                                <a data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                   data-bs-original-title="Edit" href="#"
+                                                                   data-id="{{$item->id}}"
+                                                                   class="btn btn-warning btn-sm edit"><i
+                                                                        class="fas fa-edit"></i></a>
+                                                                <a data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                   data-bs-original-title="Delete"
+                                                                   href="{{route('delete',['id'=>$item->id])}}"
+                                                                   class="btn btn-danger btn-sm delete"><i
+                                                                        class="fas fa-trash"></i></a>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    @empty
-                                    @endforelse
-                                </div>
+                                    </div>
+                                @empty
+                                @endforelse
                             </div>
-                        @empty
-                        @endforelse
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @empty
+        @endforelse
     </div>
 
     <div class="modal fade" id="edit-label-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -619,6 +606,19 @@
 </script>
 <script>
     $(document).ready(function () {
+        $(document).on('click','.timeline-view',function (e){
+           e.preventDefault();
+           var id = $(this).data('id')
+            $('.nav-home-all').each(function (){
+                if ($(this).data('id') != id){
+                    if ($(this).hasClass('d-none') == false){
+                        $(this).addClass('d-none');
+                    }
+                }
+            });
+           $('#nav-home-'+id).toggleClass('d-none');
+        });
+
         $('[data-bs-toggle="tooltip"]').tooltip();
         $('#add-form').validate({
             errorElement: 'span',
