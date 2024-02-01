@@ -100,60 +100,6 @@
     </div>
     <div class="row">
         <div class="col-lg-12 col-12 mb-3">
-            <div class="card h-lg-100 overflow-hidden ">
-                <div class="card-header bg-body-tertiary">
-                    <div class="d-flex justify-content-between align-items-center ">
-                        <h5 class="mb-0 d-inline">Label</h5>
-                        <a data-bs-toggle="modal" data-bs-target="#add-label-modal" href="#"
-                           class="btn btn-success btn-sm"><i class="fas fa-plus fa-fw"></i>Add New</a>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive scrollbar">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Color</th>
-                                <th scope="col">Created</th>
-                                <th class="text-end" scope="col">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($labels as $label)
-                                <tr>
-                                    <td>{{$label->name}}</td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar"
-                                                 style="width: 100%;background: {{$label->color}}"></div>
-                                        </div>
-                                    </td>
-                                    <td>{{$label->created_at->format('m/d/Y H:i:s')}}</td>
-                                    <td class="text-end">
-                                        <div>
-                                            <a data-id="{{$label->id}}" data-name="{{$label->name}}"
-                                               data-color="{{$label->color}}" class="btn btn-link p-0 edit-label"
-                                               type="button" data-bs-toggle="tooltip"
-                                               data-bs-placement="top" title="Edit"><span
-                                                    class="text-500 fas fa-edit"></span></a>
-                                            <a href="{{route('label.delete',['id'=>$label->id])}}"
-                                               class="btn btn-link delete-label p-0 ms-2" type="button"
-                                               data-bs-toggle="tooltip"
-                                               data-bs-placement="top" title="Delete"><span
-                                                    class="text-500 fas fa-trash-alt"></span></a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                            @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-12 col-12 mb-3">
             <div class="card h-lg-100 overflow-hidden">
                 <div class="card-header bg-body-tertiary">
                     <div class="d-flex justify-content-between align-items-center ">
