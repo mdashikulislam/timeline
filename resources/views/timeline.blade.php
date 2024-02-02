@@ -127,8 +127,8 @@
                                         <div class="timeline-item-content">
                                             <div class="timeline-item-card"
                                                  style="background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);color:#fff">
-                                                @if(@$item->labels()->exists())
-                                                    <h4 class="m-0"><span class="badge rounded-pill mb-2" style="color:#fff;background: {{$item->labels->color}}">{{$item->labels->name}}</span></h4>
+                                                @if(@$item->label)
+                                                    <h4 class="m-0"><span class="badge rounded-pill mb-2" style="color:#fff;background: {{$item->label_color}}">{{$item->label}}</span></h4>
                                                 @endif
                                                 <h5 class="mb-2" style="color:#fff">{{$item->title}}</h5>
                                                 @if($item->comment)
