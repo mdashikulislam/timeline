@@ -228,11 +228,9 @@
             <div class="col-lg-12 d-none nav-home-all" data-id="{{$timeline->id}}" id="nav-home-{{$timeline->id}}">
                 <div class="card mb-3">
                     <div class="card-header bg-body-tertiary">
-                        <div class="d-flex justify-content-between align-items-center ">
+                        <div class="d-flex justify-content-start align-items-center ">
                             <h3>{{$timeline->name}}  @if($timeline->first_name) ({{$timeline->first_name}} {{$timeline->last_name}}) @endif</h3>
-                            <a data-bs-toggle="modal" data-bs-target="#add-modal-{{$timeline->id}}" href="#"
-                               class="btn btn-success btn-sm"><i
-                                    class="fas fa-plus fa-fw"></i>Add New</a>
+
                         </div>
                     </div>
                     <div class="card-body">
@@ -244,6 +242,9 @@
                                     @endphp
                                     <input type="hidden" id="copy-{{$timeline->id}}" value="{{$copyLink}}">
                                     <div class="btn-group">
+                                        <a data-bs-toggle="modal" data-bs-target="#add-modal-{{$timeline->id}}" href="#"
+                                           class="btn btn-success"><i
+                                                class="fas fa-plus fa-fw"></i>Add New</a>
                                         <a data-link="{{$copyLink}}" data-id="{{$timeline->id}}"
                                            data-email="{{$timeline->email}}" href="#"
                                            class="btn btn-info text-white send-mail"><i
@@ -279,9 +280,9 @@
                                                 <div class="timeline-item-content">
                                                     <div class="timeline-item-card"
                                                          style="background: linear-gradient(89.7deg, rgb(0, 32, 95) 2.8%, rgb(132, 53, 142) 97.8%);color:#fff">
-                                                        @if(@$item->labels()->exists())
+                                                        @if(@$item->label)
                                                             <h4 class="m-0"><span class="badge rounded-pill mb-2"
-                                                                                  style="color:#fff;background: {{$item->labels->color}}">{{$item->labels->name}}</span>
+                                                                                  style="color:#fff;background: {{$item->label_color}}">{{$item->label}}</span>
                                                             </h4>
                                                         @endif
                                                         <h5 class="mb-2" style="color:#fff">{{$item->title}}</h5>
@@ -355,6 +356,16 @@
                                     <div class="mb-3">
                                         <label class="col-form-label" for="recipient-name">Title:</label>
                                         <input class="form-control" name="title" type="text" required/>
+                                    </div>
+                                    <div class="row">
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="col-form-label" for="recipient-name">Label Name:</label>
+                                            <input class="form-control" name="label_name" type="text" />
+                                        </div>
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="col-form-label" for="recipient-name">Label Color:</label>
+                                            <input class="form-control" name="label_color" type="color" required/>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="mb-3 col-lg-6">

@@ -15,7 +15,6 @@ class MainController extends Controller
     {
         $timeline = Timeline::with(['items'=>function($q){
             $q->orderByDesc('date_time');
-            $q->with('labels');
         }])->orderBy('created_at','ASC')->get();
         $labels = Label::all();
         return view('main')
@@ -45,6 +44,8 @@ class MainController extends Controller
         $timeline->date_time = $datetime;
         $timeline->comment = $request->comment;
         $timeline->timeline_id = $request->timeline;
+        $timeline->label = $request->label_name;
+        $timeline->label_color = $request->label_color;
         if ($request->file){
             $timeline->attachment = $this->uploadSingleFile($request->file,'attachment','at');
         }
@@ -121,29 +122,25 @@ class MainController extends Controller
                     </div>
                     <div class="p-4 pb-0">';
                         if (Auth::check()){
-                            $html .='<div class="row mb-3">
-                                    <div class="col-lg-6">
+                            $html .='<div class=" mb-3">
                                         <label class="col-form-label" for="recipient-name">Select Timeline:</label>
                                         <select name="timeline" class="form-select" required>
                                             '.getTimelineDropdown($exist->timeline_id).'
                                         </select>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <label class="col-form-label" for="recipient-name">Select Label:</label>
-                                        <select name="label" class="form-select">
-                                            '.getLabelDropdown($exist->label_id).'
-                                        </select>
-                                    </div>
                             </div>';
                         }else{
-                            $html .='<input type="hidden" name="timeline" value="'.$exist->timeline->id.'"><div class="mb-3">
-                                        <label class="col-form-label" for="recipient-name">Select Label:</label>
-                                        <select name="label" class="form-select">
-                                            '.getLabelDropdown($exist->label_id).'
-                                        </select>
-                                    </div>';
+                            $html .='<input type="hidden" name="timeline" value="'.$exist->timeline->id.'">';
                         }
-
+                    $html .='<div class="row">
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="col-form-label" for="recipient-name">Label Name:</label>
+                                            <input class="form-control" value="'.$exist->label.'" name="label_name" type="text" />
+                                        </div>
+                                        <div class="mb-3 col-lg-6">
+                                            <label class="col-form-label" for="recipient-name">Label Color:</label>
+                                            <input class="form-control" value="'.$exist->label_color.'" name="label_color" type="color" required/>
+                                        </div>
+                                    </div>';
                     $html .='<div class="mb-3">
                             <label class="col-form-label" for="recipient-name">Title:</label>
                             <input class="form-control" name="title"  type="text" value="'.$exist->title.'" required/>
@@ -200,7 +197,8 @@ class MainController extends Controller
         $timeline->date_time = $datetime;
         $timeline->comment = $request->comment;
         $timeline->timeline_id = $request->timeline;
-        $timeline->label_id = $request->label ?? 0;
+        $timeline->label = $request->label_name;
+        $timeline->label_color = $request->label_color;
         if ($request->file){
             $timeline->attachment = $this->uploadSingleFile($request->file,'attachment','at');
         }
