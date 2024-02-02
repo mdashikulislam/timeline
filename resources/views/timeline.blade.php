@@ -290,14 +290,18 @@
                         <div class="p-4 pb-0">
                             <input type="hidden" name="timeline" value="{{$timeline->id}}">
                             <div class="mb-3">
-                                <label class="col-form-label" for="recipient-name">Select Label:</label>
-                                <select name="label" class="form-select">
-                                    {!! getLabelDropdown() !!}
-                                </select>
-                            </div>
-                            <div class="mb-3">
                                 <label class="col-form-label" for="recipient-name">Title:</label>
                                 <input class="form-control" name="title" type="text" required/>
+                            </div>
+                            <div class="row">
+                                <div class="mb-3 col-lg-6">
+                                    <label class="col-form-label" for="recipient-name">Label Name:</label>
+                                    <input class="form-control" name="label_name" type="text" />
+                                </div>
+                                <div class="mb-3 col-lg-6">
+                                    <label class="col-form-label" for="recipient-name">Label Color:</label>
+                                    <input class="form-control" name="label_color" type="color" required/>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="mb-3 col-lg-6">
