@@ -32,7 +32,7 @@ function getLabelDropdown($selected = 0): string
 function getStatusDropdown($selected = 0): string
 {
     $options = ['Inactive','Active'];
-    $html = '<option value="">Select Status</option>';
+    $html = '';
     if (!empty($options)){
         foreach ($options as $item){
             $html .='<option value="'.$item.'"';
