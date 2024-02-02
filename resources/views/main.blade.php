@@ -110,7 +110,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive scrollbar">
-                        <table class="table" id="timeline-table">
+                        <table class="table table-hover" id="timeline-table">
                             <thead>
                             <tr>
                                 <th scope="col">Timeline Name</th>
@@ -124,15 +124,15 @@
                             </thead>
                             <tbody>
                             @forelse($timelines as $timeline)
-                                <tr>
-                                    <td>{{$timeline->name}}</td>
-                                    <td>{{$timeline->first_name}}</td>
-                                    <td>{{$timeline->last_name}}</td>
-                                    <td>{{$timeline->email}}</td>
-                                    <td><span
+                                <tr  >
+                                    <td data-id="{{$timeline->id}}" class="table-row">{{$timeline->name}}</td>
+                                    <td data-id="{{$timeline->id}}" class="table-row">{{$timeline->first_name}}</td>
+                                    <td data-id="{{$timeline->id}}" class="table-row">{{$timeline->last_name}}</td>
+                                    <td data-id="{{$timeline->id}}" class="table-row">{{$timeline->email}}</td>
+                                    <td data-id="{{$timeline->id}}" class="table-row"><span
                                             class="badge {{$timeline->is_edit == 'Active' ? 'bg-success':'bg-danger' }}">{{$timeline->is_edit}}</span>
                                     </td>
-                                    <td>{{$timeline->created_at->format('m/d/Y H:i:s')}}</td>
+                                    <td data-id="{{$timeline->id}}" class="table-row">{{$timeline->created_at->format('m/d/Y H:i:s')}}</td>
                                     <td class="text-end">
                                         <div>
                                             <a  data-id="{{$timeline->id}}"
@@ -143,7 +143,7 @@
                                                data-bs-toggle="modal"
                                                data-bs-target="#edit-timeline-modal-{{$timeline->id}}"><span
                                                     class="text-500 fas fa-edit"></span></a>
-                                            <a href="{{route('timeline.delete',['id'=>$timeline->id])}}"
+                                            <a  href="{{route('timeline.delete',['id'=>$timeline->id])}}"
                                                class="btn btn-link p-0 ms-2 delete-timeline" type="button"
                                                data-bs-toggle="tooltip"
                                                data-bs-placement="top" title="Delete"><span
@@ -553,7 +553,7 @@
 </script>
 <script>
     $(document).ready(function () {
-        $(document).on('click','.timeline-view',function (e){
+        $(document).on('click','.timeline-view,.table-row',function (e){
            e.preventDefault();
            var id = $(this).data('id')
             $('.nav-home-all').each(function (){
@@ -565,6 +565,8 @@
             });
            $('#nav-home-'+id).toggleClass('d-none');
         });
+
+
 
         $('[data-bs-toggle="tooltip"]').tooltip();
         $('#add-form').validate({
